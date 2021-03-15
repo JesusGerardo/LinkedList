@@ -1,32 +1,38 @@
 package uaslp.ingenieria.labs;
 
-import uaslp.ingenieria.labs.list.Iterator;
 import uaslp.ingenieria.labs.list.LinkedList;
-import uaslp.ingenieria.labs.list.ReverseIterator;
+import uaslp.ingenieria.labs.list.Position;
 
 public class Main {
-
     public static void main(String[] args) {
 
-        LinkedList lista1 = new LinkedList();
+        int cuenta =  LinkedList.getListsCount();
+
+        LinkedList<Integer> lista1 = new LinkedList<>();
+        LinkedList<String> lista2 = new LinkedList<>();
 
         lista1.add(1);
         lista1.add(4);
         lista1.add(3);
         lista1.add(7);
 
-        Iterator it = lista1.getIterator();
+        lista2.add(" hola");
+        lista2.add(" Object ");
+        lista2.add(" Oriented ");
+        lista2.add(" Programming ");
+
+        LinkedList<Integer>.Iterator it = lista1.getIterator();
 
         while(it.hasNext()){
-            Iterator backupIt = new Iterator(it);
-            int element = it.next(); //regresar el dato y avanzar el iterador
+            LinkedList<Integer>.Iterator backupIt = lista1.new Iterator(it);
+            int element = it.next();
 
             if(element == 3){
-                lista1.insert(10, LinkedList.BEFORE, backupIt);
+                lista1.insert(10, Position.BEFORE, backupIt);
             }
 
             if(element == 7){
-                lista1.insert(15, LinkedList.AFTER, backupIt);
+                lista1.insert(15, Position.AFTER, backupIt);
             }
         }
 
@@ -46,13 +52,20 @@ public class Main {
 
         System.out.println("---------------------");
 
-        ReverseIterator reverseIterator = lista1.getReverseIterator();
+        LinkedList<Integer>.ReverseIterator reverseIterator = lista1.getReverseIterator();
 
-        while(reverseIterator.hasPrevious()){
-            int element = reverseIterator.previous();
+        while(reverseIterator.hasNext()){
+            int element = reverseIterator.next();
 
             System.out.println("Dato: " + element);
         }
 
+        System.out.println("---------------------");
+
+        LinkedList<String>.Iterator itStrings = lista2.getIterator();
+
+        while(itStrings.hasNext()){
+            System.out.println(itStrings.next());
+        }
     }
 }

@@ -1,29 +1,87 @@
 package uaslp.ingenieria.labs.list;
 
-/**
- * Lista doblemente ligada
- */
-public class LinkedList {
+import static uaslp.ingenieria.labs.list.Position.AFTER;
+import static uaslp.ingenieria.labs.list.Position.BEFORE;
 
-    public static final int BEFORE = 0;
-    public static final int AFTER = 1;
+public class LinkedList<G> {
 
-    private Node head;
-    private Node tail;
+    private static class Node<T>{
+        private final T data;
+        private Node<T> previous;
+        private Node<T> next;
+
+        Node(T data){
+            this.data = data;
+        }
+    }
+
+    private Node<G> head;
+    private Node<G> tail;
     private int size;
 
-    /**
-     * Inserts data at the end of the list
-     *
-     * @param data Data to be inserted
-     */
-    public void add(int data) {
-        Node node = new Node(data);
+    public LinkedList() {
+        listsCount ++;
+    }
 
-        node.setPrevious(tail);
+    private static int listsCount = 0;
+
+    public static int getListsCount(){
+        return listsCount;
+    }
+
+    public class Iterator {
+        private Node<G> currentNode;
+
+        public Iterator() {
+            this.currentNode = head;
+        }
+
+        public Iterator(Iterator iterator){
+            currentNode = iterator.currentNode;
+        }
+
+        public boolean hasNext(){
+            return currentNode != null;
+        }
+
+        public G next(){
+            G data = currentNode.data;
+            currentNode = currentNode.next;
+            return data;
+        }
+
+        Node<G> getCurrentNode() {  // modificador de acceso se llama -> package-private
+            return currentNode;
+        }
+    }
+
+    public class ReverseIterator {
+
+        private Node<G> currentNode;
+
+        public ReverseIterator() {
+            this.currentNode = tail;
+        }
+
+
+        public boolean hasNext(){
+            return currentNode != null;
+        }
+
+        public G next(){
+            G data = currentNode.data;
+            currentNode = currentNode.previous;
+            return data;
+        }
+    }
+
+    public void add(G data) {
+        Node<G> node = new Node<>(data);
+
+        node.previous = tail;
 
         if (tail != null) {
-            tail.setNext(node);
+            tail.next = node;
         }
 
         if (head == null) {
@@ -34,24 +92,20 @@ public class LinkedList {
         size++;
     }
 
-    /**
-     * @param index 0-index
-     * @return data in index
-     */
-    public int get(int index) {
-        Node currentNode = head;
+    public G get(int index) {
+        Node<G> currentNode = head;
         int currentIndex = 0;
 
         while (currentIndex < index) {
-            currentNode = currentNode.getNext();
+            currentNode = currentNode.next;
             currentIndex++;
         }
 
-        return currentNode.getData();
+        return currentNode.data;
     }
 
     public void delete(int index) {
-        Node currentNode = head;
+        Node<G> currentNode = head;
         int currentIndex = 0;
 
         if (index < 0 || index >= size) {
@@ -67,52 +121,50 @@ public class LinkedList {
         }
 
         if (index == 0) {
-            head = head.getNext();
-            head.setPrevious(null);
+            head = head.next;
+            head.previous = null;
         }
 
         if (index == size) {
-            tail = tail.getPrevious();
-            tail.setNext(null);
+            tail = tail.previous;
+            tail.next = null;
         }
 
         if (index > 0 && index < size) {
             while (currentIndex < index) {
-                currentNode = currentNode.getNext();
+                currentNode = currentNode.next;
                 currentIndex++;
             }
-            currentNode.getPrevious().setNext(currentNode.getNext());
-            currentNode.getNext().setPrevious(currentNode.getPrevious());
+            currentNode.previous.next = currentNode.next;
+            currentNode.next.previous = currentNode.previous;
         }
 
 
     }
 
     public Iterator getIterator() {
-        return new Iterator(head);
+        return new Iterator();
     }
 
-    public void insert(int data, int position, Iterator it) {
-        // ¿qué ofrece java para restringir los valores de position a solamente BEFORE y AFTER?
-
-        Node newNode = new Node(data);
-        Node currentNode = it.getCurrentNode();
+    public void insert(G data, Position position, Iterator it) {
+        Node<G> newNode = new Node<>(data);
+        Node<G> currentNode = it.getCurrentNode();
 
         if (position == AFTER) {
-            newNode.setNext(currentNode.getNext());
-            newNode.setPrevious(currentNode);
-            currentNode.setNext(newNode);
-            if (newNode.getNext() != null) {
-                newNode.getNext().setPrevious(newNode);
+            newNode.next = currentNode.next;
+            newNode.previous = currentNode;
+            currentNode.next = newNode;
+            if (newNode.next != null) {
+                newNode.next.previous = newNode;
             } else {
                 tail = newNode;
             }
         } else if (position == BEFORE) {
-            newNode.setPrevious(currentNode.getPrevious());
-            newNode.setNext(currentNode);
-            currentNode.setPrevious(newNode);
-            if (newNode.getPrevious() != null) {
-                newNode.getPrevious().setNext(newNode);
+            newNode.previous = currentNode.previous;
+            newNode.next = currentNode;
+            currentNode.previous = newNode;
+            if (newNode.previous != null) {
+                newNode.previous.next = newNode;
             } else {
                 head = newNode;
             }
@@ -122,14 +174,11 @@ public class LinkedList {
         size++;
     }
 
-
-    //Iterador -> patrón de diseño
-
     public int getSize() {
         return size;
     }
 
     public ReverseIterator getReverseIterator() {
-        return new ReverseIterator(tail);
+        return new ReverseIterator();
     }
 }
