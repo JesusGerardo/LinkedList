@@ -3,7 +3,7 @@ package uaslp.ingenieria.labs.list;
 import static uaslp.ingenieria.labs.list.Position.AFTER;
 import static uaslp.ingenieria.labs.list.Position.BEFORE;
 
-public class LinkedList<G> {
+public class LinkedList<G> implements List<G>{
 
     private static class Node<T>{
         private final T data;
@@ -75,6 +75,7 @@ public class LinkedList<G> {
         }
     }
 
+    @Override
     public void add(G data) {
         Node<G> node = new Node<>(data);
 
@@ -92,6 +93,7 @@ public class LinkedList<G> {
         size++;
     }
 
+    @Override
     public G get(int index) {
         Node<G> currentNode = head;
         int currentIndex = 0;
@@ -104,6 +106,7 @@ public class LinkedList<G> {
         return currentNode.data;
     }
 
+    @Override
     public void delete(int index) {
         Node<G> currentNode = head;
         int currentIndex = 0;
@@ -174,6 +177,7 @@ public class LinkedList<G> {
         size++;
     }
 
+    @Override
     public int getSize() {
         return size;
     }
