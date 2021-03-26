@@ -29,14 +29,14 @@ public class LinkedList<G> implements List<G>{
         return listsCount;
     }
 
-    public class Iterator {
+    public class ForwardIterator implements Iterator<G> {
         private Node<G> currentNode;
 
-        public Iterator() {
+        public ForwardIterator() {
             this.currentNode = head;
         }
 
-        public Iterator(Iterator iterator){
+        public ForwardIterator(ForwardIterator iterator){
             currentNode = iterator.currentNode;
         }
 
@@ -55,7 +55,7 @@ public class LinkedList<G> implements List<G>{
         }
     }
 
-    public class ReverseIterator {
+    public class ReverseIterator implements Iterator<G>{
 
         private Node<G> currentNode;
 
@@ -145,13 +145,15 @@ public class LinkedList<G> implements List<G>{
 
     }
 
-    public Iterator getIterator() {
-        return new Iterator();
+    @Override
+    public Iterator<G> getIterator() {
+        return new ForwardIterator();
     }
 
-    public void insert(G data, Position position, Iterator it) {
+    @Override
+    public void insert(G data, Position position, Iterator<G> it) {
         Node<G> newNode = new Node<>(data);
-        Node<G> currentNode = it.getCurrentNode();
+        Node<G> currentNode = ((ForwardIterator)it).getCurrentNode();
 
         if (position == AFTER) {
             newNode.next = currentNode.next;
