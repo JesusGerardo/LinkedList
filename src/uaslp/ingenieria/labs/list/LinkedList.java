@@ -19,11 +19,11 @@ public class LinkedList<G> implements List<G>{
     private Node<G> tail;
     private int size;
 
+    private static int listsCount = 0;
+
     public LinkedList() {
         listsCount ++;
     }
-
-    private static int listsCount = 0;
 
     public static int getListsCount(){
         return listsCount;
@@ -36,10 +36,6 @@ public class LinkedList<G> implements List<G>{
             this.currentNode = head;
         }
 
-        public ForwardIterator(ForwardIterator iterator){
-            currentNode = iterator.currentNode;
-        }
-
         public boolean hasNext(){
             return currentNode != null;
         }
@@ -48,10 +44,6 @@ public class LinkedList<G> implements List<G>{
             G data = currentNode.data;
             currentNode = currentNode.next;
             return data;
-        }
-
-        Node<G> getCurrentNode() {  // modificador de acceso se llama -> package-private
-            return currentNode;
         }
     }
 
@@ -151,40 +143,12 @@ public class LinkedList<G> implements List<G>{
     }
 
     @Override
-    public void insert(G data, Position position, Iterator<G> it) {
-        Node<G> newNode = new Node<>(data);
-        Node<G> currentNode = ((ForwardIterator)it).getCurrentNode();
-
-        if (position == AFTER) {
-            newNode.next = currentNode.next;
-            newNode.previous = currentNode;
-            currentNode.next = newNode;
-            if (newNode.next != null) {
-                newNode.next.previous = newNode;
-            } else {
-                tail = newNode;
-            }
-        } else if (position == BEFORE) {
-            newNode.previous = currentNode.previous;
-            newNode.next = currentNode;
-            currentNode.previous = newNode;
-            if (newNode.previous != null) {
-                newNode.previous.next = newNode;
-            } else {
-                head = newNode;
-            }
-        } else {
-            System.out.println("No conozco el valor de position");
-        }
-        size++;
-    }
-
-    @Override
     public int getSize() {
         return size;
     }
 
-    public ReverseIterator getReverseIterator() {
+    @Override
+    public Iterator<G> getReverseIterator() {
         return new ReverseIterator();
     }
 }
