@@ -2,8 +2,7 @@ package uaslp.ingenieria.labs.list;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LinkedListTest {
 
@@ -13,7 +12,7 @@ public class LinkedListTest {
 
         int listsCount=LinkedList.getListsCount();
 
-        assertEquals(8,listsCount);
+        assertEquals(7,listsCount);
     }
 
     @Test
@@ -93,15 +92,13 @@ public class LinkedListTest {
     }
 
     @Test
-    public void givenAnExistentListWithThreeElements_whenTryingToDeleteANonExistentElement_thenSizeIsThree(){
+    public void givenAnExistentListWithThreeElements_whenTryingToDeleteANonExistentElement_thenMyIndexOutOfBondsExceptionIsThrown(){
         LinkedList<Integer> lista = new LinkedList<>();
         lista.add(5);
         lista.add(10);
         lista.add(50);
 
-        lista.delete(3);
-
-        assertEquals(3,lista.getSize());
+        assertThrows(MyIndexOutOfBoundsException.class, ()->lista.delete(3));
     }
 
     @Test
@@ -132,5 +129,13 @@ public class LinkedListTest {
         }
 
         assertEquals(6,element);
+    }
+
+    @Test
+    public void givenAnExistentListWithOneElement_whenGetElementAtIndex2_thenMyIndexOutOfBoundsExceptionIsThrown(){
+        LinkedList<Integer> lista = new LinkedList<>();
+        lista.add(6);
+
+        assertThrows(MyIndexOutOfBoundsException.class, ()->lista.get(2));
     }
 }

@@ -87,6 +87,9 @@ public class LinkedList<G> implements List<G>{
 
     @Override
     public G get(int index) {
+        if(index < 0 || index > size)
+            throw new MyIndexOutOfBoundsException();
+
         Node<G> currentNode = head;
         int currentIndex = 0;
 
@@ -104,7 +107,7 @@ public class LinkedList<G> implements List<G>{
         int currentIndex = 0;
 
         if (index < 0 || index >= size) {
-            return;
+            throw new MyIndexOutOfBoundsException();
         }
 
         size--;
